@@ -8,7 +8,9 @@ min_var_est = 1e-8
 
 
 
-def mmd_loss(x_src, x_tar,gamma=10 ^ 3):
+def mmd_loss(x_src, x_tar, gamma=10 ^ 3, use_var=False):
+    if use_var:
+        return mix_rbf_mmd2_and_ratio(x_src, x_tar, [gamma])
     return mix_rbf_mmd2(x_src, x_tar, [gamma])
 
 
@@ -78,7 +80,7 @@ def mix_rbf_mmd2(X, Y, sigma_list, biased=True):
 def mix_rbf_mmd2_and_ratio(X, Y, sigma_list, biased=True):
     K_XX, K_XY, K_YY, d = _mix_rbf_kernel(X, Y, sigma_list)
     # return _mmd2_and_ratio(K_XX, K_XY, K_YY, const_diagonal=d, biased=biased)
-    return _mmd2_and_ratio(K_XX, K_XY, K_YY, const_diagonal=False, biased=biased)
+    return _mmd2_and_ratio(K_XX, K_XY, K_YY, const_diagonal=False, biased=biased)[0]
 
 
 ################################################################################

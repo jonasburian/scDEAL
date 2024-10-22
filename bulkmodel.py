@@ -77,7 +77,7 @@ def run_main(args):
 
     
 
-    para = str(args.bulk)+"_data_"+str(args.data_name)+"_drug_"+str(args.drug)+"_bottle_"+str(args.bottleneck)+"_edim_"+str(args.encoder_h_dims)+"_pdim_"+str(args.predictor_h_dims)+"_model_"+reduce_model+"_dropout_"+str(args.dropout)+"_gene_"+str(args.printgene)+"_lr_"+str(args.lr)+"_mod_"+str(args.mod)+"_sam_"+str(args.sampling)    #(para)
+    para = f"{args.bulk}_data_{args.data_name}_drug_{args.drug}_bottle_{args.bottleneck}_edim_{args.encoder_h_dims}_pdim_{args.predictor_h_dims}_model_{args.dimreduce}_dropout_{args.dropout}_gene_{args.printgene}_lr_{args.lr}_mod_{args.mod}_sam_{args.sampling}_seed_{args.seed}"
     now=time.strftime("%Y-%m-%d-%H-%M-%S")
 
 
@@ -169,7 +169,7 @@ def run_main(args):
     logging.info(np.mean(data))
 
     # Split traning valid test set
-    X_train_all, X_test, Y_train_all, Y_test = train_test_split(data, label, test_size=test_size, random_state=42)
+    X_train_all, X_test, Y_train_all, Y_test = train_test_split(data, label, test_size=test_size, random_state=args.seed)
     X_train, X_valid, Y_train, Y_valid = train_test_split(X_train_all, Y_train_all, test_size=valid_size, random_state=42)
     # sampling method
     if sampling == "no":
@@ -402,6 +402,8 @@ if __name__ == '__main__':
     parser.add_argument('--printgene', type=str, default='F',help='Print the cirtical gene list: T: print. Default: T')
     parser.add_argument('--dropout', type=float, default=0.3,help='Dropout of neural network. Default: 0.3')
     parser.add_argument('--bulk', type=str, default='integrate',help='Selection of the bulk database.integrate:both dataset. old: GDSC. new: CCLE. Default: integrate')
+
+    parser.add_argument('--seed', type=int, default=42, help='Random seed for reproducibility')
     warnings.filterwarnings("ignore")
 
     args, unknown = parser.parse_known_args()

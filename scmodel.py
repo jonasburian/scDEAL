@@ -124,7 +124,7 @@ def run_main(args):
     mod = args.mod
     
     # Merge parameters as string for saving model and logging
-    para = str(args.bulk)+"_data_"+str(args.sc_data)+"_drug_"+str(args.drug)+"_bottle_"+str(args.bottleneck)+"_edim_"+str(args.bulk_h_dims)+"_pdim_"+str(args.predictor_h_dims)+"_model_"+reduce_model+"_dropout_"+str(args.dropout)+"_gene_"+str(args.printgene)+"_lr_"+str(args.lr)+"_mod_"+str(args.mod)+"_sam_"+str(args.sampling)    
+    para = f"{args.bulk}_data_{args.sc_data}_drug_{args.drug}_bottle_{args.bottleneck}_edim_{args.bulk_h_dims}_pdim_{args.predictor_h_dims}_model_{args.dimreduce}_dropout_{args.dropout}_gene_{args.printgene}_lr_{args.lr}_mod_{args.mod}_sam_{args.sampling}_seed_{args.seed}"  
     source_data_path = args.bulk_data
     
     # Record time
@@ -302,7 +302,7 @@ def run_main(args):
     source_data = mmscaler.fit_transform(data_r)
 
     # Split source data
-    Xsource_train_all, Xsource_test, Ysource_train_all, Ysource_test = train_test_split(source_data,label, test_size=test_size, random_state=42)
+    Xsource_train_all, Xsource_test, Ysource_train_all, Ysource_test = train_test_split(source_data,label, test_size=test_size, random_state=args.seed)
     Xsource_train, Xsource_valid, Ysource_train, Ysource_valid = train_test_split(Xsource_train_all,Ysource_train_all, test_size=valid_size, random_state=42)
 
     # Transform source data
@@ -617,6 +617,8 @@ if __name__ == '__main__':
                         Can be no, upsampling, downsampling, or SMOTE. default: no')
     parser.add_argument('--fix_source', type=int, default=0,help='Fix the bulk level model. Default: 0')
     parser.add_argument('--bulk', type=str, default='integrate',help='Selection of the bulk database.integrate:both dataset. old: GDSC. new: CCLE. Default: integrate')
+
+    parser.add_argument('--seed', type=int, default=42, help='Random seed for reproducibility')
     #
     args, unknown = parser.parse_known_args()
     run_main(args)

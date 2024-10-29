@@ -25,21 +25,22 @@ import trainers as t
 from models import (AEBase,PretrainedPredictor, PretrainedVAEPredictor, VAEBase)
 import matplotlib
 import random
-seed=42
-torch.manual_seed(seed)
-#np.random.seed(seed)
-torch.cuda.manual_seed(seed)
-torch.cuda.manual_seed_all(seed)
-#from transformers import *
-random.seed(seed)
-np.random.seed(seed)
-os.environ['PYTHONHASHSEED'] = str(seed)
-#torch.manual_seed(seed)
-#torch.cuda.manual_seed(seed)
-torch.backends.cudnn.deterministic = True
-torch.backends.cudnn.benchmark=False
 
 def run_main(args):
+
+    seed=args.seed
+    torch.manual_seed(seed)
+    #np.random.seed(seed)
+    torch.cuda.manual_seed(seed)
+    torch.cuda.manual_seed_all(seed)
+    #from transformers import *
+    random.seed(seed)
+    np.random.seed(seed)
+    os.environ['PYTHONHASHSEED'] = str(seed)
+    #torch.manual_seed(seed)
+    #torch.cuda.manual_seed(seed)
+    torch.backends.cudnn.deterministic = True
+    torch.backends.cudnn.benchmark=False
 
     #args.checkpoint = "save/bulk_pre/integrate_data_GSE112274_drug_GEFITINIB_bottle_256_edim_512,256_pdim_256,128_model_DAE_dropout_0.1_gene_F_lr_0.5_mod_new_sam_no"
     if(args.checkpoint not in ["False","True"]):
@@ -169,7 +170,7 @@ def run_main(args):
     logging.info(np.mean(data))
 
     # Split traning valid test set
-    X_train_all, X_test, Y_train_all, Y_test = train_test_split(data, label, test_size=test_size, random_state=args.seed)
+    X_train_all, X_test, Y_train_all, Y_test = train_test_split(data, label, test_size=test_size, random_state=42)
     X_train, X_valid, Y_train, Y_valid = train_test_split(X_train_all, Y_train_all, test_size=valid_size, random_state=42)
     # sampling method
     if sampling == "no":

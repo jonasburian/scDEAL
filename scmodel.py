@@ -25,18 +25,6 @@ from models import (AEBase, DaNN, PretrainedPredictor,
                     PretrainedVAEPredictor, VAEBase)
 from scipy.spatial import distance_matrix, minkowski_distance, distance
 import random
-seed = 42
-torch.manual_seed(seed)
-#np.random.seed(seed)
-torch.cuda.manual_seed(seed)
-torch.cuda.manual_seed_all(seed)
-#from transformers import *
-random.seed(seed)
-np.random.seed(seed)
-os.environ['PYTHONHASHSEED'] = str(seed)
-
-torch.backends.cudnn.deterministic = True
-torch.backends.cudnn.benchmark=False
 
 DATA_MAP={
 "GSE117872":"data/GSE117872/GSE117872_good_Data_TPM.txt",
@@ -62,6 +50,20 @@ class TargetModel(nn.Module):
         return y_src
         
 def run_main(args):
+
+    seed = args.seed
+    torch.manual_seed(seed)
+    #np.random.seed(seed)
+    torch.cuda.manual_seed(seed)
+    torch.cuda.manual_seed_all(seed)
+    #from transformers import *
+    random.seed(seed)
+    np.random.seed(seed)
+    os.environ['PYTHONHASHSEED'] = str(seed)
+
+    torch.backends.cudnn.deterministic = True
+    torch.backends.cudnn.benchmark=False
+
 ################################################# START SECTION OF LOADING PARAMETERS #################################################
     # Read parameters
 
@@ -302,7 +304,7 @@ def run_main(args):
     source_data = mmscaler.fit_transform(data_r)
 
     # Split source data
-    Xsource_train_all, Xsource_test, Ysource_train_all, Ysource_test = train_test_split(source_data,label, test_size=test_size, random_state=args.seed)
+    Xsource_train_all, Xsource_test, Ysource_train_all, Ysource_test = train_test_split(source_data,label, test_size=test_size, random_state=42)
     Xsource_train, Xsource_valid, Ysource_train, Ysource_valid = train_test_split(Xsource_train_all,Ysource_train_all, test_size=valid_size, random_state=42)
 
     # Transform source data

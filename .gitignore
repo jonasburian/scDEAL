@@ -122,6 +122,9 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+scDEALenv/
+data/
+save/
 
 # Spyder project settings
 .spyderproject
@@ -140,3 +143,4 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+scDEAL.zip
